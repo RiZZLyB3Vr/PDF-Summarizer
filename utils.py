@@ -1,16 +1,15 @@
 from dotenv import load_dotenv
-import streamlit as st
-import time
 from PyPDF2 import PdfReader
-from streamlit_extras.add_vertical_space import add_vertical_space
 from langchain.text_splitter import CharacterTextSplitter
-from langchain_community.embeddings import HuggingFaceBgeEmbeddings  # Changed to BGE embeddings
+from langchain_community.embeddings import HuggingFaceBgeEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
 from langchain_groq import ChatGroq
+import os
+
+load_dotenv()
 
 def process_text(text):
-    # split into chunks
     text_splitter = CharacterTextSplitter(
         separator="\n",
         chunk_size=1000,
@@ -19,40 +18,47 @@ def process_text(text):
     )
     chunks = text_splitter.split_text(text)
     
-    # Use BGE embeddings (free and high quality)
-    model_name = "BAAI/bge-small-en"
-    model_kwargs = {'device': 'cpu'}
-    encode_kwargs = {'normalize_embeddings': True}
     embeddings = HuggingFaceBgeEmbeddings(
-        model_name=model_name,
-        model_kwargs=model_kwargs,
-        encode_kwargs=encode_kwargs
+        model_name="BAAI/bge-small-en",
+        model_kwargs={'device': 'cpu'},
+        encode_kwargs={'normalize_embeddings': True}
     )
-    knowledge_base = FAISS.from_texts(chunks, embeddings)
     
-    return knowledge_base
+    return FAISS.from_texts(chunks, embeddings)
 
-def summarizer(pdf):
-    if pdf is not None:
-        pdf_reader = PdfReader(pdf)
-        text = ""
-        for page in pdf_reader.pages:
-            text += page.extract_text()
-        
-        knowledge_base = process_text(text)
-        
-        query = "Summarize the contents of the PDF file in approximately 5-10 sentences"
-        
-        if query:
-            docs = knowledge_base.similarity_search(query)
-            
-            llm = ChatGroq(
-                api_key="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",
-                model_name="mixtral-8x7b-32768",
-                temperature=0.8
-            )
-            
-            chain = load_qa_chain(llm, chain_type="stuff")
-            response = chain.run(input_documents=docs, question=query)
-            
-            return response
+def create_knowledge_base(pdf):
+    """Extracts text from PDF and builds a FAISS knowledge base."""
+    pdf_reader = PdfReader(pdf)
+    text = "\n".join([page.extract_text() for page in pdf_reader.pages])
+    if not text.strip():
+        raise ValueError("Error: PDF contains no extractable text")
+    return process_text(text)
+
+def generate_summary(knowledge_base):
+    """Uses the knowledge base to generate a summary."""
+    # Retrieve relevant chunks for summarization
+    docs = knowledge_base.similarity_search(
+        "Provide a concise summary in 5-10 sentences of the document below, preserving all key technical details"
+    )
+    llm = ChatGroq(
+        api_key=os.getenv("GROQ_API_KEY"),
+        model_name="llama3-8b-8192",
+        temperature=0.3
+    )
+    chain = load_qa_chain(llm, chain_type="refine")
+    summary = chain.run(
+        input_documents=docs,
+        question="Provide a concise summary in 5-10 sentences of the document below, preserving all key technical details"
+    )
+    return summary
+
+def answer_question(knowledge_base, question):
+    """Answers a user question based on the knowledge base."""
+    docs = knowledge_base.similarity_search(question)
+    llm = ChatGroq(
+        api_key=os.getenv("GROQ_API_KEY"),
+        model_name="llama3-8b-8192",
+        temperature=0.3
+    )
+    chain = load_qa_chain(llm, chain_type="refine")
+    return chain.run(input_documents=docs, question=question)
