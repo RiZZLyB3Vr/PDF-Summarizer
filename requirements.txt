@@ -1,0 +1,8 @@
+#List of all dependencies 
+streamlit
+python-dotenv
+PyPDF2
+langchain
+langchain_community
+langchain_groq
+FAISS-cpu  # or the specific package name for FAISS you're using
