@@ -1,12 +1,12 @@
-#PDF Chatbot
+# PDF Chatbot
 
 An AI-powered Streamlit application that allows users to upload PDF documents, generate concise summaries, and interact with the document content via a chat interface.
 
-##Description
+## Description
 
 The PDF Chatbot processes a PDF file to extract its text, generates a summary of the document, and then provides an interactive chat interface where users can ask questions about the content. The chatbot uses a language model (via LangChain and ChatGroq) to answer questions based on the PDF content. It also provides suggested follow-up questions based on the user's previous queries. The app supports both light and dark themes for improved readability.
 
-##Features
+## Features
 
 - **PDF Upload & Processing:**  
   Upload PDF documents and extract text using PyPDF2. (An OCR fallback can be implemented if needed.)
@@ -24,7 +24,7 @@ The PDF Chatbot processes a PDF file to extract its text, generates a summary of
 - **Optimized Token Usage & Retry Logic:**  
   The application minimizes token usage by adjusting chunk sizes and limits the number of context chunks. It also includes retry logic to handle rate limit errors gracefully.
 
-##Requirements
+## Requirements
 
 - Python 3.7+
 - [Streamlit](https://streamlit.io/)
