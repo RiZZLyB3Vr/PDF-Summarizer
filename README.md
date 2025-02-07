@@ -1,131 +1,120 @@
-# PDF-Summarizer
-A ChatBot application built using LangChain using HuggingFace Embeddings and Groq API for fast processing and is hosted using Stremlit
+Below is a sample **README.md** file for your PDF Chatbot application:
 
+---
 
-# PDF Summarizer ChatBot
+```markdown
+# PDF Chatbot
 
-A sophisticated web application that leverages artificial intelligence to generate concise summaries of PDF documents. Built with Streamlit and powered by advanced language models, this tool streamlines document analysis by providing intelligent summarization capabilities.
+An AI-powered Streamlit application that allows users to upload PDF documents, generate concise summaries, and interact with the document content via a chat interface.
 
 ## Description
 
-The PDF Summarizer ChatBot transforms the way users interact with PDF documents by offering automated summarization functionality. The application utilizes state-of-the-art language models and embedding techniques to process and understand document content, delivering accurate and contextual summaries on demand.
-
-## Key Technologies
-
-The application is built using modern technologies and frameworks:
-
-- **Streamlit**: Powers the interactive web interface
-- **LangChain**: Orchestrates the document processing and summarization pipeline
-- **Groq**: Provides the large language model capabilities
-- **HuggingFace BGE Embeddings**: Enables efficient document embedding and semantic search
-- **FAISS**: Manages vector storage and similarity search operations
-- **PyPDF2**: Handles PDF document processing
-
-## Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/pdf-summarizer-chatbot.git
-cd pdf-summarizer-chatbot
-```
-
-2. Create a virtual environment:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows, use: venv\Scripts\activate
-```
-
-3. Install required dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-4. Set up environment variables:
-Create a `.env` file in the root directory and add your Groq API key:
-```
-GROQ_API_KEY=your_groq_api_key_here
-```
-
-## Usage
-
-1. Start the application:
-```bash
-streamlit run app.py
-```
-
-2. Access the application through your web browser (typically at `http://localhost:8501`)
-
-3. Upload a PDF document using the file uploader
-
-4. Click "Generate Summary" to process the document and receive a comprehensive summary
-
-## Project Structure
-
-```
-pdf-summarizer-chatbot/
-├── app.py              # Main Streamlit application
-├── utils.py            # Utility functions for PDF processing
-├── requirements.txt    # Project dependencies
-├── .env               # Environment variables (create this file)
-└── README.md          # Project documentation
-```
+The PDF Chatbot processes a PDF file to extract its text, generates a summary of the document, and then provides an interactive chat interface where users can ask questions about the content. The chatbot uses a language model (via LangChain and ChatGroq) to answer questions based on the PDF content. It also provides suggested follow-up questions based on the user's previous queries. The app supports both light and dark themes for improved readability.
 
 ## Features
 
-- Intuitive web interface for PDF upload
-- Advanced text processing with character-level splitting
-- High-quality embeddings using BGE models
-- Efficient vector similarity search
-- Contextual summarization using Mixtral-8x7b model
-- Configurable processing parameters
+- **PDF Upload & Processing:**  
+  Upload PDF documents and extract text using PyPDF2. (An OCR fallback can be implemented if needed.)
+  
+- **Summary Generation:**  
+  Generate a concise summary of the PDF content using a language model.
 
-## Technical Implementation
+- **Interactive Chat Interface:**  
+  Ask questions about the document and receive contextually relevant answers.  
+  - The chat interface displays messages in styled chat bubbles that adapt to the user's theme.
+  
+- **Suggested Questions:**  
+  Based on the most recent user query, the app offers suggested questions to help further explore the content.
 
-The application follows a structured processing pipeline:
+- **Optimized Token Usage & Retry Logic:**  
+  The application minimizes token usage by adjusting chunk sizes and limits the number of context chunks. It also includes retry logic to handle rate limit errors gracefully.
 
-1. **Document Processing**: Extracts text from PDF documents using PyPDF2
-2. **Text Chunking**: Splits text into manageable segments with controlled overlap
-3. **Embedding Generation**: Creates document embeddings using BGE models
-4. **Vector Storage**: Organizes embeddings in FAISS for efficient retrieval
-5. **Summary Generation**: Leverages Groq's Mixtral model for coherent summarization
+## Requirements
 
-## Configuration
+- Python 3.7+
+- [Streamlit](https://streamlit.io/)
+- [PyPDF2](https://pypi.org/project/PyPDF2/)
+- [pdf2image](https://pypi.org/project/pdf2image/) *(if OCR is needed)*
+- [pytesseract](https://pypi.org/project/pytesseract/) *(if OCR is needed)*
+- [langchain](https://github.com/hwchase17/langchain)
+- [langchain_community](https://github.com/hwchase17/langchain)
+- [langchain_groq](https://github.com/yourprovider/langchain_groq) *(or your specific API integration)*
+- FAISS (or FAISS-cpu)
+- [python-dotenv](https://pypi.org/project/python-dotenv/)
 
-Key parameters can be adjusted in the application:
+## Installation
 
-- Chunk size: 1000 characters
-- Chunk overlap: 200 characters
-- Model temperature: 0.8
-- Embedding model: BAAI/bge-small-en
+1. **Clone the repository:**
 
-## Environmental Requirements
+   ```bash
+   git clone https://github.com/yourusername/pdf-chatbot.git
+   cd pdf-chatbot
+   ```
 
-- Python 3.8 or higher
-- Sufficient RAM for document processing (recommended 8GB+)
-- Internet connectivity for API access
-- CPU with support for modern instruction sets
+2. **Set up a virtual environment:**
 
-## Security Notes
+   ```bash
+   python -m venv myvenv
+   # Activate the virtual environment:
+   # On Windows:
+   myvenv\Scripts\activate
+   # On macOS/Linux:
+   source myvenv/bin/activate
+   ```
 
-- API keys should be stored securely in environment variables
-- Uploaded documents are processed in memory and not permanently stored
-- User data is not retained between sessions
+3. **Install dependencies:**
 
-## Contributing
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-We welcome contributions to improve the PDF Summarizer ChatBot:
+4. **Configure Environment Variables:**
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/enhancement`)
-3. Commit your changes (`git commit -m 'Add new feature'`)
-4. Push to the branch (`git push origin feature/enhancement`)
-5. Open a Pull Request
+   Create a `.env` file in the project root with at least the following content:
 
-## Future Enhancements
+   ```env
+   GROQ_API_KEY=your_actual_api_key_here
+   ```
 
-- Support for additional document formats
-- Custom summarization parameters
-- Batch processing capabilities
-- Enhanced error handling and validation
-- Multi-language support
-- Export functionality for summaries
+## Usage
+
+1. **Run the application:**
+
+   ```bash
+   streamlit run app.py
+   ```
+
+2. **Interact with the App:**
+   - **Upload a PDF:** Use the file uploader to select and upload your PDF document.
+   - **View Summary:** The app will display a concise summary of the document.
+   - **Chat Interface:** Type your question in the chat box and click "Send" to get an answer.  
+     Suggested questions based on your last query will be displayed below the chat.
+   - **Theme Compatibility:** The chat interface automatically adapts to light or dark themes based on your system settings.
+
+## Deployment
+
+- **Streamlit Cloud:**  
+  Push your repository to GitHub and deploy it using [Streamlit Cloud](https://streamlit.io/cloud).
+
+- **Other Platforms:**  
+  You can also deploy this application using services such as Heroku, AWS, or Docker. Ensure that environment variables (e.g., `GROQ_API_KEY`) are properly set in your chosen deployment environment.
+
+## Future Improvements
+
+- Implement an OCR fallback for image-based PDFs.
+- Enhance prompt engineering for more accurate answers.
+- Add additional error handling and logging.
+- Explore integration with alternative AI models for improved performance.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+## Acknowledgments
+
+- Thanks to the developers of Streamlit, LangChain, and the associated libraries that made this project possible.
+```
+
+---
+
+Feel free to adjust the content (such as repository links, deployment instructions, or additional features) to fit your specific needs.
