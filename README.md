@@ -94,13 +94,6 @@ The PDF Chatbot processes a PDF file to extract its text, generates a summary of
 - **Other Platforms:**  
   You can also deploy this application using services such as Heroku, AWS, or Docker. Ensure that environment variables (e.g., `GROQ_API_KEY`) are properly set in your chosen deployment environment.
 
-## Future Improvements
-
-- Implement an OCR fallback for image-based PDFs.
-- Enhance prompt engineering for more accurate answers.
-- Add additional error handling and logging.
-- Explore integration with alternative AI models for improved performance.
-
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
@@ -108,8 +101,4 @@ This project is licensed under the [MIT License](LICENSE).
 ## Acknowledgments
 
 - Thanks to the developers of Streamlit, LangChain, and the associated libraries that made this project possible.
-```
 
----
-
-Feel free to adjust the content (such as repository links, deployment instructions, or additional features) to fit your specific needs.
